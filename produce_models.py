@@ -260,10 +260,10 @@ genderedWords = {
 #big list that sentences get appended to
 sentences = []
 
-directory = r'C:\Users\Joey\Documents\nlp\nlp_final_project\novels'
+directory = r'./novels'
 for filename in os.listdir(directory):
     #define training data
-    with open(r'C:\Users\Joey\Documents\nlp\nlp_final_project\novels\{}'.format(filename), 'r', encoding = 'utf-8') as file:
+    with open(r'./novels/{}'.format(filename), 'r', encoding = 'utf-8') as file:
         #print(filename)
         data = file.read().replace('\n', ' ')
 
@@ -292,7 +292,9 @@ for filename in os.listdir(directory):
         sentences.append(tmpList1)
         sentences.append(tmpList2)
 
+print(sentences)
 #train model
 model = Word2Vec(sentences, min_count = 1)
 #save model
-model.save('regular_model.bin')
+model.save('balanced_model.bin')
+print('success')
