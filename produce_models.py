@@ -279,41 +279,38 @@ for filename in os.listdir(directory):
         #remove punctuation
         for c in string.punctuation:
             sentence = sentence.replace(c," ")
-        
-        #split the sentence into a list of words, but as a weird SpaCy object
-        words = nlp(sentence)
-        
-        #get a list of all the named entities from this sentence, only people
-        ents = [e.text for e in words.ents if e.label_ == 'PERSON']
-        
         #turn sentence into a list of words
+        words = sentence.split()
         tmpList1 = []
-        tmpList2 = []
-        for word in words:
-            #if word is a named entity or an empty string, skip over it!
-            if word.text in ents or word.text[0] == ' ':
+        #tmpList2 = []
+        for i in range(len(words)):
+            word = words[i]
+            
+            #if word is an empty string, skip over it!
+            if word[0] == ' ':
                 continue
-            #if the word is a gendered noun/pronoun, swap it!
-            #if the gendered word is lowercase, the swap is super easy
-            if word.text in genderedWords:
-                tmpList2.append(genderedWords['{}'.format(word.text)])
             
-            #if the gendered word is uppercase, cast it as lowercase and swap it with its uppercased counterpart
-            elif word.text.lower() in genderedWords:
-                tmpList2.append(genderedWords['{}'.format(word.text.lower())].capitalize())
+            # #if the word is a gendered noun/pronoun, swap it!
+            # #if the gendered word is lowercase, the swap is super easy
+            # if word in genderedWords:
+            #     tmpList2.append(genderedWords['{}'.format(word)])
             
-            #else carry the word over to both lists
-            else:
-                tmpList2.append(word.text)
-            tmpList1.append(word.text)
+            # #if the gendered word is uppercase, cast it as lowercase and swap it with its uppercased counterpart
+            # elif word.lower() in genderedWords:
+            #     tmpList2.append(genderedWords['{}'.format(word.lower())].capitalize())
+
+            # #else carry the word over to both lists
+            # else:
+            #     tmpList2.append(word)
+            tmpList1.append(word)
 
         #add these sentence pairs to the big list!
         sentences.append(tmpList1)
-        sentences.append(tmpList2)
+        #sentences.append(tmpList2)
 
 #print(sentences)
 #train model
 model = Word2Vec(sentences, min_count = 1)
 #save model
-model.save('balanced_model2.bin')
+model.save('vanilla_model.bin')
 print('success')
