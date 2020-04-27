@@ -74,99 +74,149 @@ secondVector = wino_and_bolu_model.v('smart').tolist()
 
 print(cosineSimilarity(firstVector, secondVector))
 
-# heVector = E.v('he').tolist()
-# sheVector = E.v('she').tolist()
-# posMascWords = ['faithful', 'responsible', 'adventurous', 'grand', 'worthy', 'brave', 'good', 'normal', 'ambitious',
-#                 'gallant', 'mighty', 'loyal', 'valiant', 'courteous', 'powerful', 'rational', 'supreme', 'meritorious',
-#                 'serene', 'godlike', 'noble', 'rightful', 'eager', 'financial', 'chivalrous']
-# negMascWords = ['unjust', 'dumb', 'violent', 'weak', 'evil', 'stupid', 'petty', 'brutal', 'wicked', 'rebellious', 'bad',
-#             'worthless', 'hostile', 'careless', 'unsung', 'abusive', 'financial', 'feudal', 'false', 'feeble',
-#             'impotent', 'dishonest', 'ungrateful','unfaithful', 'incompetent']
-# neutMascWords = ['german', 'teutonic', 'financial', 'feudal', 'later', 'austrian', 'feudatory', 'maternal', 'bavarian',
-#                  'negro', 'paternal', 'frankish', 'welsh', 'eccliastical', 'rural', 'persian', 'belted', 'swiss',
-#                  'finnish', 'national', 'priestly', 'merovingian', 'capetian', 'prussian', 'racial']
-# posFemWords = ['pretty', 'fair', 'beautiful', 'lovely', 'charming', 'sweet', 'grand', 'stately', 'attractive', 'chaste',
-#                'virtuous', 'fertile', 'delightful', 'gentle', 'privileged', 'romantic', 'enchanted', 'kindly',
-#                'elegant', 'dear', 'devoted', 'beauteous', 'sprightly', 'beloved', 'pleasant']
-# negFemWords = ['horrible', 'destructive', 'notorious', 'dreary', 'ugly', 'weird', 'harried', 'diabetic', 'discontented',
-#                'infected', 'unmarried', 'unequal', 'widowed', 'unhappy', 'horrid', 'pitiful', 'frightful', 'artificial',
-#                'sullen', 'hysterical', 'awful', 'haughty', 'terrible', 'damned', 'topless']
-# neutFemWords = ['virgin', 'alleged', 'maiden', 'russian', 'fair', 'widowed', 'grand', 'byzantine', 'fashionable',
-#                 'aged', 'topless', 'withered', 'colonial', 'diabetic', 'burlesque', 'blonde', 'parisian', 'clad',
-#                 'female', 'oriental', 'ancient', 'feminist', 'matronly', 'pretty', 'asiatic']
 
-# wordsLists = [posMascWords, negMascWords, neutMascWords, posFemWords, negFemWords, neutFemWords]
+# Loading list of adjectives
+data = pd.read_csv('./data/adjectives.csv')
+print(data.head)
+print(list(data))
 
-# # Naming scheme: Model the embeddings are based on, sentiment+gender adjective list
-# balPosMasc = []
-# balNegMasc = []
-# balNeutMasc = []
-# balPosFem = []
-# balNegFem = []
-# balNeutFem = []
+posMascWords = data['masc_pos_terms'].tolist()
+negMascWords = data['masc_neg_terms'].tolist()
+neutMascWords = data['masc_neu_terms'].tolist()
+posFemWords = data['fem_pos_terms'].tolist()
+negFemWords = data['fem_neg_terms'].tolist()
+neutFemWords = data['fem_neu_terms'].tolist()
 
-# balDiffsList = [balPosMasc, balNegMasc, balNeutMasc, balPosFem, balNegFem, balNeutFem]
+wordsLists = [posMascWords, negMascWords, neutMascWords, posFemWords, negFemWords, neutFemWords]
+print(wordsLists)
 
-# regPosMasc = []
-# regNegMasc = []
-# regNeutMasc = []
-# regPosFem = []
-# regNegFem = []
-# regNeutFem = []
+# create pronoun vectors for testing
+# Model 1
+vanillaHe = vanilla_model['he']
+print(vanillaHe)
+vanillaShe = vanilla_model['she']
 
-# regDiffsList = [regPosMasc, regNegMasc, regNeutMasc, regPosFem, regNegFem, regNeutFem]
+# Model 2
+boluHe = bolu_model.v('he').tolist()
+print(boluHe)
+boluShe = bolu_model.v('she').tolist()
 
-# # for word in negMascWords:
-# #     negVector = E.v(word).tolist()
-# #     mascSim = cosineSimilarity(heVector, negVector)
-# #     femSim = cosineSimilarity(sheVector, negVector)
-# #     diff = mascSim - femSim
-# #     print(word)
-# #     print('He + MascAdj Cosine Sim: ' + str(mascSim))
-# #     print('She + MascAdj Cosine Sim: ' + str(femSim))
-# #     print('Difference: ' + str(diff) + '\n')
+# Model 3
+winoHe = wino_model['he']
+winoShe = wino_model['she']
 
-# index = 0
-# for wordList in wordsLists:
-#     for word in wordList:
-#         print(word)
-#         #for each word in the list, compute diffs of cosine sim from balanced embeddings and regular embeddings
-#         try:
-#             balVector = E.v(word).tolist()
-#             mascSim = cosineSimilarity(heVector, balVector)
-#             femSim = cosineSimilarity(sheVector, balVector)
-#             diff = mascSim - femSim
-#             print(diff)
-#             balDiffsList[index].append(diff)
+# Model 4
+winoAndBoluHe = wino_and_bolu_model.v('he').tolist()
+winoAndBoluShe = wino_and_bolu_model.v('she').tolist()
 
-#             regVector = R.v(word).tolist()
-#             mascSim = cosineSimilarity(heVector, regVector)
-#             femSim = cosineSimilarity(sheVector, regVector)
-#             diff = mascSim - femSim
-#             print(diff)
-#             regDiffsList[index].append(diff)
-#         except:
-#             balDiffsList[index].append('NaN')
-#             regDiffsList[index].append('NaN')
 
-#     index+=1
+# Naming scheme: Model the embeddings are based on, sentiment+gender adjective list
+vanillaPosMasc = []
+vanillaNegMasc = []
+vanillaNeutMasc = []
+vanillaPosFem = []
+vanillaNegFem = []
+vanillaNeutFem = []
 
-# print(balDiffsList)
-# print(regDiffsList)
+boluPosMasc = []
+boluNegMasc = []
+boluNeutMasc = []
+boluPosFem = []
+boluNegFem = []
+boluNeutFem = []
 
-# info = {'Balanced model + Positive Masculine words': balDiffsList[0],
-#         'Balanced model + Negative Masculine words': balDiffsList[1],
-#         'Balanced model + Neutral Masculine words': balDiffsList[2],
-#         'Balanced model + Positive Feminine words': balDiffsList[3],
-#         'Balanced model + Negative Feminine words': balDiffsList[4],
-#         'Balanced model + Neutral Feminine words': balDiffsList[5],
-#         'Regular model + Positive Masculine words': regDiffsList[0],
-#         'Regular model + Negative Masculine words': regDiffsList[1],
-#         'Regular model + Neutral Masculine words': regDiffsList[2],
-#         'Regular model + Positive Feminine words': regDiffsList[3],
-#         'Regular model + Negative Feminine words': regDiffsList[4],
-#         'Regular model + Neutral Feminine words': regDiffsList[5],}
+winoPosMasc = []
+winoNegMasc = []
+winoNeutMasc = []
+winoPosFem = []
+winoNegFem = []
+winoNeutFem = []
 
-# df = pd.DataFrame(info)
-# df.to_csv(r'results.csv', index=False, header=True)
-# print(df.head())
+winoAndBoluPosMasc = []
+winoAndBoluNegMasc = []
+winoAndBoluNeutMasc = []
+winoAndBoluPosFem = []
+winoAndBoluNegFem = []
+winoAndBoluNeutFem = []
+
+
+vanillaDiffsList = [vanillaPosMasc, vanillaNegMasc, vanillaNeutMasc, vanillaPosFem, vanillaNegFem, vanillaNeutFem]
+boluDiffsList = [boluPosMasc, boluNegMasc, boluNeutMasc, boluPosFem, boluNegFem, boluNeutFem]
+winoDiffsList = [winoPosMasc, winoNegMasc, winoNeutMasc, winoPosFem, winoNegFem, winoNeutFem]
+winoAndBoluDiffsList = [winoAndBoluPosMasc, winoAndBoluNegMasc, winoAndBoluNeutMasc, winoAndBoluPosFem, winoAndBoluNegFem, winoAndBoluNeutFem]
+index = 0
+for wordList in wordsLists:
+    for word in wordList:
+        print(word)
+        #for each word in the list, compute diffs of cosine sim from balanced embeddings and regular embeddings
+        try:
+            vanillaVector = vanilla_model[word]
+            boluVector = bolu_model.v(word).tolist()
+            winoVector = wino_model[word]
+            winoAndBoluVector = wino_and_bolu_model.v(word).tolist()
+
+            # vanilla
+            mascSim = cosineSimilarity(vanillaHe, vanillaVector)
+            femSim = cosineSimilarity(vanillaShe, vanillaVector)
+            diff = mascSim - femSim
+            print(diff)
+            vanillaDiffsList[index].append(diff)
+
+            # bolu
+            mascSim = cosineSimilarity(boluHe, boluVector)
+            femSim = cosineSimilarity(boluShe, boluVector)
+            diff = mascSim - femSim
+            print(diff)
+            boluDiffsList[index].append(diff)
+
+            # wino
+            mascSim = cosineSimilarity(winoHe, winoVector)
+            femSim = cosineSimilarity(winoShe, winoVector)
+            diff = mascSim - femSim
+            print(diff)
+            winoDiffsList[index].append(diff)
+
+            # wino and bolu
+            mascSim = cosineSimilarity(winoAndBoluHe, winoAndBoluVector)
+            femSim = cosineSimilarity(winoAndBoluShe, winoAndBoluVector)
+            diff = mascSim - femSim
+            print(diff)
+            winoAndBoluDiffsList[index].append(diff)
+
+
+        except:
+            vanillaDiffsList[index].append('NaN')
+            boluDiffsList[index].append('NaN')
+            winoDiffsList[index].append('NaN')
+            winoAndBoluDiffsList[index].append('NaN')
+
+    index+=1
+
+info = {'Vanilla model + Positive Masculine words': vanillaDiffsList[0],
+        'Vanilla model + Negative Masculine words': vanillaDiffsList[1],
+        'Vanilla model + Neutral Masculine words': vanillaDiffsList[2],
+        'Vanilla model + Positive Feminine words': vanillaDiffsList[3],
+        'Vanilla model + Negative Feminine words': vanillaDiffsList[4],
+        'Vanilla model + Neutral Feminine words': vanillaDiffsList[5],
+        'Bolu model + Positive Masculine words': boluDiffsList[0],
+        'Bolu model + Negative Masculine words': boluDiffsList[1],
+        'Bolu model + Neutral Masculine words': boluDiffsList[2],
+        'Bolu model + Positive Feminine words': boluDiffsList[3],
+        'Bolu model + Negative Feminine words': boluDiffsList[4],
+        'Bolu model + Neutral Feminine words': boluDiffsList[5],
+        'Wino model + Positive Masculine words': winoDiffsList[0],
+        'Wino model + Negative Masculine words': winoDiffsList[1],
+        'Wino model + Neutral Masculine words': winoDiffsList[2],
+        'Wino model + Positive Feminine words': winoDiffsList[3],
+        'Wino model + Negative Feminine words': winoDiffsList[4],
+        'Wino model + Neutral Feminine words': winoDiffsList[5],
+        'Wino and Bolu model + Positive Masculine words': winoAndBoluDiffsList[0],
+        'Wino and Bolu model + Negative Masculine words': winoAndBoluDiffsList[1],
+        'Wino and Bolu model + Neutral Masculine words': winoAndBoluDiffsList[2],
+        'Wino and Bolu model + Positive Feminine words': winoAndBoluDiffsList[3],
+        'Wino and Bolu model + Negative Feminine words': winoAndBoluDiffsList[4],
+        'Wino and Bolu model + Neutral Feminine words': winoAndBoluDiffsList[5],}
+
+df = pd.DataFrame(info)
+df.to_csv(r'results.csv', index=False, header=True)
+print(df.head())
