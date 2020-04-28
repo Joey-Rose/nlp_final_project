@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import we
 from scipy import spatial
+import numpy as np
 
 #load 1st and 2nd models
 vanilla_model = Word2Vec.load('vanilla_model.bin')
@@ -62,7 +63,7 @@ print("gender specific", len(gender_specific_words), gender_specific_words[:10])
 debias.debias(wino_and_bolu_model, gender_specific_words, defs, equalize_pairs)
 
 def cosineSimilarity(firstVector, secondVector):
-    return 1 - spatial.distance.cosine(firstVector, secondVector)
+    return np.dot(firstVector, secondVector) / (np.linalg.norm(firstVector) * np.linalg.norm(secondVector))
 
 firstVector = wino_and_bolu_model.v('he').tolist()
 secondVector = wino_and_bolu_model.v('smart').tolist()
@@ -158,28 +159,28 @@ for wordList in wordsLists:
             # vanilla
             mascSim = cosineSimilarity(vanillaHe, vanillaVector)
             femSim = cosineSimilarity(vanillaShe, vanillaVector)
-            diff = mascSim - femSim
+            diff = abs(mascSim - femSim)
             print(diff)
             vanillaDiffsList[index].append(diff)
 
             # bolu
             mascSim = cosineSimilarity(boluHe, boluVector)
             femSim = cosineSimilarity(boluShe, boluVector)
-            diff = mascSim - femSim
+            diff = abs(mascSim - femSim)
             print(diff)
             boluDiffsList[index].append(diff)
 
             # wino
             mascSim = cosineSimilarity(winoHe, winoVector)
             femSim = cosineSimilarity(winoShe, winoVector)
-            diff = mascSim - femSim
+            diff = abs(mascSim - femSim)
             print(diff)
             winoDiffsList[index].append(diff)
 
             # wino and bolu
             mascSim = cosineSimilarity(winoAndBoluHe, winoAndBoluVector)
             femSim = cosineSimilarity(winoAndBoluShe, winoAndBoluVector)
-            diff = mascSim - femSim
+            diff = abs(mascSim - femSim)
             print(diff)
             winoAndBoluDiffsList[index].append(diff)
 
