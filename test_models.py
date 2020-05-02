@@ -60,22 +60,23 @@ with open('./data/gender_specific_seed.json', "r") as f:
     gender_specific_words = json.load(f)
 print("gender specific", len(gender_specific_words), gender_specific_words[:10])
 
+#debias the models
+debias.debias(bolu_model, gender_specific_words, defs, equalize_pairs)
 debias.debias(wino_and_bolu_model, gender_specific_words, defs, equalize_pairs)
-
 
 def cosineSimilarity(firstVector, secondVector):
     return np.dot(firstVector, secondVector) / (np.linalg.norm(firstVector) * np.linalg.norm(secondVector))
 
 
-firstVector = wino_and_bolu_model.v('he').tolist()
-secondVector = wino_and_bolu_model.v('smart').tolist()
+# firstVector = wino_and_bolu_model.v('he').tolist()
+# secondVector = wino_and_bolu_model.v('smart').tolist()
 
-print(cosineSimilarity(firstVector, secondVector))
+# print(cosineSimilarity(firstVector, secondVector))
 
-firstVector = wino_and_bolu_model.v('she').tolist()
-secondVector = wino_and_bolu_model.v('smart').tolist()
+# firstVector = wino_and_bolu_model.v('she').tolist()
+# secondVector = wino_and_bolu_model.v('smart').tolist()
 
-print(cosineSimilarity(firstVector, secondVector))
+# print(cosineSimilarity(firstVector, secondVector))
 
 # Loading list of adjectives
 data = pd.read_csv('./data/adjectives.csv')
@@ -152,44 +153,44 @@ for wordList in wordsLists:
         print(word)
         # for each word in the list, compute diffs of cosine sim from balanced embeddings and regular embeddings
         try:
-            vanillaVector = vanilla_model[word]
-            boluVector = bolu_model.v(word).tolist()
-            winoVector = wino_model[word]
-            winoAndBoluVector = wino_and_bolu_model.v(word).tolist()
-
             # vanilla
+            vanillaVector = vanilla_model[word]
             mascSim = cosineSimilarity(vanillaHe, vanillaVector)
             femSim = cosineSimilarity(vanillaShe, vanillaVector)
             diff = abs(mascSim - femSim)
             print(diff)
             vanillaDiffsList[index].append(diff)
-
+        except:
+            vanillaDiffsList[index].append('NaN')
+        try:
             # bolu
+            boluVector = bolu_model.v(word).tolist()
             mascSim = cosineSimilarity(boluHe, boluVector)
             femSim = cosineSimilarity(boluShe, boluVector)
             diff = abs(mascSim - femSim)
             print(diff)
             boluDiffsList[index].append(diff)
-
+        except:
+            boluDiffsList[index].append('NaN')
+        try:
             # wino
+            winoVector = wino_model[word]
             mascSim = cosineSimilarity(winoHe, winoVector)
             femSim = cosineSimilarity(winoShe, winoVector)
             diff = abs(mascSim - femSim)
             print(diff)
             winoDiffsList[index].append(diff)
-
+        except:
+            winoDiffsList[index].append('NaN')
+        try:
             # wino and bolu
+            winoAndBoluVector = wino_and_bolu_model.v(word).tolist()
             mascSim = cosineSimilarity(winoAndBoluHe, winoAndBoluVector)
             femSim = cosineSimilarity(winoAndBoluShe, winoAndBoluVector)
             diff = abs(mascSim - femSim)
             print(diff)
             winoAndBoluDiffsList[index].append(diff)
-
-
         except:
-            vanillaDiffsList[index].append('NaN')
-            boluDiffsList[index].append('NaN')
-            winoDiffsList[index].append('NaN')
             winoAndBoluDiffsList[index].append('NaN')
 
     index += 1
@@ -237,43 +238,44 @@ winoAndBoluDiffsList = []
 for occ in occList:
     print(occ)
     try:
-        vanillaVector = vanilla_model[occ]
-        boluVector = bolu_model.v(occ).tolist()
-        winoVector = wino_model[occ]
-        winoAndBoluVector = wino_and_bolu_model.v(occ).tolist()
-
         # vanilla
+        vanillaVector = vanilla_model[occ]
         mascSim = cosineSimilarity(vanillaHe, vanillaVector)
         femSim = cosineSimilarity(vanillaShe, vanillaVector)
         diff = abs(mascSim - femSim)
         print(diff)
         vanillaDiffsList.append(diff)
-
+    except:
+        vanillaDiffsList.append('NaN')
+    try:    
         # bolu
+        boluVector = bolu_model.v(occ).tolist()
         mascSim = cosineSimilarity(boluHe, boluVector)
         femSim = cosineSimilarity(boluShe, boluVector)
         diff = abs(mascSim - femSim)
         print(diff)
         boluDiffsList.append(diff)
-
+    except:
+        boluDiffsList.append('NaN')
+    try:
         # wino
+        winoVector = wino_model[occ]
         mascSim = cosineSimilarity(winoHe, winoVector)
         femSim = cosineSimilarity(winoShe, winoVector)
         diff = abs(mascSim - femSim)
         print(diff)
         winoDiffsList.append(diff)
-
+    except:
+        winoDiffsList.append('NaN')
+    try:
         # wino and bolu
+        winoAndBoluVector = wino_and_bolu_model.v(occ).tolist()
         mascSim = cosineSimilarity(winoAndBoluHe, winoAndBoluVector)
         femSim = cosineSimilarity(winoAndBoluShe, winoAndBoluVector)
         diff = abs(mascSim - femSim)
         print(diff)
         winoAndBoluDiffsList.append(diff)
-
     except:
-        vanillaDiffsList.append('NaN')
-        boluDiffsList.append('NaN')
-        winoDiffsList.append('NaN')
         winoAndBoluDiffsList.append('NaN')
 
 occInfo = {'Occupations': occList,
@@ -549,43 +551,44 @@ winoAndBoluDiffsList = []
 for word in genderedWords:
     print(word)
     try:
-        vanillaVector = vanilla_model[word]
-        boluVector = bolu_model.v(word).tolist()
-        winoVector = wino_model[word]
-        winoAndBoluVector = wino_and_bolu_model.v(word).tolist()
-
         # vanilla
+        vanillaVector = vanilla_model[word]
         mascSim = cosineSimilarity(vanillaHe, vanillaVector)
         femSim = cosineSimilarity(vanillaShe, vanillaVector)
         diff = abs(mascSim - femSim)
         print(diff)
         vanillaDiffsList.append(diff)
-
+    except:
+        vanillaDiffsList.append('NaN')
+    try:    
         # bolu
+        boluVector = bolu_model.v(word).tolist()
         mascSim = cosineSimilarity(boluHe, boluVector)
         femSim = cosineSimilarity(boluShe, boluVector)
         diff = abs(mascSim - femSim)
         print(diff)
         boluDiffsList.append(diff)
-
+    except:
+        boluDiffsList.append('NaN')
+    try:    
         # wino
+        winoVector = wino_model[word]
         mascSim = cosineSimilarity(winoHe, winoVector)
         femSim = cosineSimilarity(winoShe, winoVector)
         diff = abs(mascSim - femSim)
         print(diff)
         winoDiffsList.append(diff)
-
+    except:
+        winoDiffsList.append('NaN')
+    try:
         # wino and bolu
+        winoAndBoluVector = wino_and_bolu_model.v(word).tolist()
         mascSim = cosineSimilarity(winoAndBoluHe, winoAndBoluVector)
         femSim = cosineSimilarity(winoAndBoluShe, winoAndBoluVector)
         diff = abs(mascSim - femSim)
         print(diff)
         winoAndBoluDiffsList.append(diff)
-
     except:
-        vanillaDiffsList.append('NaN')
-        boluDiffsList.append('NaN')
-        winoDiffsList.append('NaN')
         winoAndBoluDiffsList.append('NaN')
 
 wordInfo = {'Gendered Words': genderedWords,
