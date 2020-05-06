@@ -220,9 +220,46 @@ info = {'Vanilla model + Positive Masculine words': vanillaDiffsList[0],
         'Wino and Bolu model + Negative Feminine words': winoAndBoluDiffsList[4],
         'Wino and Bolu model + Neutral Feminine words': winoAndBoluDiffsList[5], }
 
+
+info_v2 = {'Positive Masculine words': posMascWords,
+        'Vanilla pm': vanillaDiffsList[0],
+        'Bolu pm': boluDiffsList[0],
+        'Wino pm': winoDiffsList[0],
+        'Wino + Bolu pm': winoAndBoluDiffsList[0],
+        'Negative Masculine words': negMascWords,
+        'Vanilla nm': vanillaDiffsList[1],
+        'Bolu nm': boluDiffsList[1],
+        'Wino nm': winoDiffsList[1],
+        'Wino + Bolu nm': winoAndBoluDiffsList[1],
+        'Neutral Masculine words': neutMascWords,
+        'Vanilla neutm': vanillaDiffsList[2],
+        'Bolu neutm': boluDiffsList[2],
+        'Wino neutm': winoDiffsList[2],
+        'Wino + Bolu neutm': winoAndBoluDiffsList[2],
+        'Positive Feminine words': posFemWords,
+        'Vanilla pf': vanillaDiffsList[3],
+        'Bolu pf': boluDiffsList[3],
+        'Wino pf': winoDiffsList[3],
+        'Wino + Bolu pf': winoAndBoluDiffsList[3],
+        'Negative Feminine words': negFemWords,
+        'Vanilla nf': vanillaDiffsList[4],
+        'Bolu nf': boluDiffsList[4],
+        'Wino nf': winoDiffsList[4],
+        'Wino + Bolu nf': winoAndBoluDiffsList[4],
+        'Neutral Feminine words': neutFemWords,
+        'Vanilla neutf': vanillaDiffsList[5],
+        'Bolu neutf': boluDiffsList[5],
+        'Wino neutf': winoDiffsList[5],
+        'Wino + Bolu neutf': winoAndBoluDiffsList[5],
+}
+
 df = pd.DataFrame(info)
 df.to_csv(r'adjective_results.csv', index=False, header=True)
 print(df.head())
+
+df_v2 = pd.DataFrame(info_v2)
+df_v2.to_csv(r'adjective_results_v2.csv', index=False, header=True)
+print(df_v2.head())
 
 # Testing occupations
 occList = ['carpenter', 'mechanician', 'construction worker', 'laborer', 'driver', 'sheriff', 'mover', 'developer',
